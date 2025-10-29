@@ -41,25 +41,31 @@ function Game() {
    }
 
    function handleSquareClick(i) {
-      if (squares[i]) return;
+      if (squares[i] || winner) return; // verifica se já existe um elemento na posição i ou se existe vencendor
       const nextSquares = [...squares];
       nextSquares[i] = xIsNext ? 'X' : 'O';
       setSquares(nextSquares);
       setXIsNext(!xIsNext);
    }
 
+   function resetGame() {
+      setSquares(Array(9).fill(null));
+      setXIsNext(true);
+   }
+
    return (
       <div className='game'>
          <h1 className="title">Jogo da Velha</h1>
-         <div className="status">{status}</div>
+         <div className={winner?"status winner":"status"}>{status}</div>
          <div className="board">
             <div className="row">{[0, 1, 2].map((i) => <Square value={squares[i]} onClick={() => handleSquareClick(i)} key={i} />)}</div>
             <div className="row">{[3, 4, 5].map((i) => <Square value={squares[i]} onClick={() => handleSquareClick(i)} key={i} />)}</div>
             <div className="row">{[6, 7, 8].map((i) => <Square value={squares[i]} onClick={() => handleSquareClick(i)} key={i} />)}</div>
          </div>
-         <button className="reset">Novo Jogo</button>
+         {newRound && <button className="reset" onClick={resetGame}>Novo Jogo</button>}
       </div>
    )
 }
+
 
 export default Game
